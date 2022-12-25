@@ -1,0 +1,42 @@
+#!/usr/bin/env python3
+
+import sys
+import csv
+import html
+
+def _xmlify(matches):
+    xml = '<?xml version="1.0" encoding="utf-8"?>'
+    xml += '<items>'
+    for match in matches:
+        xml += '<item valid="yes">'
+        xml += '<title>{}</title><subtitle>{}</subtitle><arg>{}</arg>'.format(*match)
+        xml += '</item>'
+    xml += '</items>'
+    return xml
+
+def _matches(queries, desc, entity):
+    if len(queries) == 1:
+        return queries[0] in desc or queries[0] in entity
+    else:
+        for query in queries:
+            if query not in desc and query not in entity:
+                return False
+        return True
+
+queries = sys.argv[1].strip().lower().split(" ")
+matches = []
+
+with open("entities.db", "r") as f:
+    for row in csv.reader(f):
+        desc, entity = row
+
+        if _matches(queries, desc, entity):
+            first_entity = entity.split(" ")[0]
+            htm = html.unescape(first_entity)
+            matches.append((htm, desc, htm))
+
+if len(matches) > 0:
+    print(_xmlify(matches))
+else:
+    sys.exit(1)
+
