@@ -5,14 +5,12 @@ import csv
 import html
 
 def _xmlify(matches):
-    xml = '<?xml version="1.0" encoding="utf-8"?>'
-    xml += '<items>'
+    items = ""
     for match in matches:
-        xml += '<item valid="yes">'
-        xml += '<title>{}</title><subtitle>{}</subtitle><arg>{}</arg>'.format(*match)
-        xml += '</item>'
-    xml += '</items>'
-    return xml
+        items += "<item>"
+        items += "<title>{}</title><subtitle>{}</subtitle><arg>{}</arg>".format(*match)
+        items += "</item>"
+    return f'<?xml version="1.0" encoding="utf-8"?><items>{items}</items>'
 
 def _matches(queries, desc, entity):
     for query in queries:
@@ -29,8 +27,9 @@ with open("entities.db", "r") as f:
         desc, entity = row
 
         if _matches(queries, desc, entity):
-            first_entity = entity.split(" ")[0]
-            htm = html.unescape(first_entity)
+            # take the first of potentially multiple aliases
+            first = entity.split(" ")[0]
+            htm = html.unescape(first)
             matches.append((htm, desc, htm))
 
 if len(matches) > 0:
