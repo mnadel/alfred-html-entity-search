@@ -20,7 +20,8 @@ def _matches(queries, desc, entity):
             return False
     return True
 
-queries = sys.argv[1].strip().lower().split(" ")
+arg = " ".join(sys.argv[1:])
+queries = list(map(lambda s: s.strip().lower(), arg.split(" ")))
 matches = []
 
 with open("entities.db", "r") as f:
