@@ -22,7 +22,7 @@ arg = " ".join(sys.argv[1:])
 queries = list(map(lambda s: s.strip().lower(), arg.split(" ")))
 matches = []
 
-with open("entities.db", "r") as f:
+with open("entities.db", mode="r", encoding="utf8") as f:
     for row in csv.reader(f):
         desc, entity = row
 
