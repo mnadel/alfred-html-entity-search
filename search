@@ -29,9 +29,8 @@ with open("entities.db", mode="r", encoding="utf8") as f:
         desc, entity = row
 
         if _matches(queries, desc, entity):
-            # take the first of potentially multiple aliases
-            first = entity.split(" ")[0]
-            htm = html.unescape(first)
+            # encode the first of potentially multiple aliases
+            htm = html.unescape(entity.split(" ")[0])
             matches.append((htm, desc, htm))
 
 if len(matches) > 0:
