@@ -18,7 +18,8 @@ def _matches(queries, desc, entity):
             return False
     return True
 
-queries = list(map(lambda s: s.strip().lower(), sys.argv[1:]))
+args = " ".join(sys.argv[1:])
+queries = list(map(lambda s: s.strip().lower(), args.split(" ")))
 
 # list of tuples: (title, subtitle, arg)
 matches = []
