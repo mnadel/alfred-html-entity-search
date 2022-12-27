@@ -1,15 +1,17 @@
 #!/usr/bin/env ruby
 
+require "csv"
 require "nokogiri"
 
 doc = Nokogiri.parse(open("charref.html"))
+out = CSV($stdout.dup)
 
 doc.css("table tr").each do |e|
   title = e["title"].split(" ")[1..].join(" ")
   e.css("td").each do |td|
     if td["class"] == "named"
       code = td.css("code").inner_html.gsub("&amp;", "&")
-      puts "#{title.downcase},#{code}"
+      out << [title.downcase, code]
     end
   end
 end
