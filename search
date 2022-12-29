@@ -14,7 +14,7 @@ def _xmlify(matches):
 
 def _matches(queries, desc, entity):
     for query in queries:
-        if query not in desc and query not in entity:
+        if query not in entity and query not in desc:
             return False
     return True
 
@@ -31,7 +31,8 @@ with open("entities.db", mode="r", encoding="utf8") as f:
         if _matches(queries, desc, entity):
             # encode the first of potentially multiple aliases
             htm = html.unescape(entity.split(" ")[0])
-            matches.append((htm, desc, htm))
+            codes = entity.replace("&", "&amp;")
+            matches.append((htm, f"{desc} ({codes})", htm))
 
 if len(matches) > 0:
     print(_xmlify(matches))
