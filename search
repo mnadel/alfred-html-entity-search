@@ -14,7 +14,7 @@ def _xmlify(matches):
 
         # encode the first of potentially multiple aliases
         title = html.unescape(entity.split(" ")[0])
-        subtitle = _escape(f"{desc}, ({entity})")
+        subtitle = _escape(f"{desc} ({entity})")
 
         items += "<item>"
         items += f"<title>{title}</title><subtitle>{subtitle}</subtitle><arg>{title}</arg>"
@@ -34,7 +34,7 @@ queries = list(map(lambda s: s.strip().lower(), args.split(" ")))
 matches = []
 
 with open("entities.db", mode="r", encoding="utf8") as f:
-    matches = [(desc, entity) for [desc, entity] in csv.reader(f) if _matches(queries, desc, entity)]
+    matches = [(desc, entity) for (desc, entity) in csv.reader(f) if _matches(queries, desc, entity)]
 
 if len(matches) > 0:
     print(_xmlify(matches))
