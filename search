@@ -30,7 +30,7 @@ def _matches(queries, desc, entity):
 args = " ".join(sys.argv[1:])
 queries = list(map(lambda s: s.strip().lower(), args.split(" ")))
 
-# list of tuples: (title, subtitle, arg)
+# list of tuples: (desc, entity)
 matches = []
 
 with open("entities.db", mode="r", encoding="utf8") as f:
