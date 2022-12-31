@@ -22,14 +22,15 @@ def _xmlify(matches):
     return f'<?xml version="1.0" encoding="utf-8"?><items>{items}</items>'
 
 def _matches(queries, desc, entity):
-    matches = [q in entity or q in desc for q in queries]
-    return all(v == True for v in matches)
+    for query in queries:
+        if query not in desc and query not in entity:
+            return False
+    return True
 
 args = " ".join(sys.argv[1:])
 queries = list(map(lambda s: s.strip().lower(), args.split(" ")))
 
 with open("entities.db", mode="r", encoding="utf8") as f:
-    # list of tuples: (desc, entity)
     matches = [(desc, entity) for (desc, entity) in csv.reader(f) if _matches(queries, desc, entity)]
 
     if len(matches) > 0:
