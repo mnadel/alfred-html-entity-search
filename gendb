@@ -3,7 +3,7 @@
 require "csv"
 require "nokogiri"
 
-doc = Nokogiri.parse(open("charref.html"))
+doc = Nokogiri.parse(open("charref.html")) # html via https://tools.w3cub.com/html-entities
 out = CSV($stdout.dup)
 
 doc.css("table tr").each do |e|

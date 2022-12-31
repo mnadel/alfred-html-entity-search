@@ -11,3 +11,7 @@ You can enter multiple search terms. It searches the description of the entity a
 1. Run `make install`
 1. In Alfred's preferences, install the workflow from this root directory
 
+## Entity Source
+
+Entity database parsed from https://tools.w3cub.com/html-entities
+
