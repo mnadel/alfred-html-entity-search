@@ -8,6 +8,7 @@ def _escape(s):
     return s.replace("&", "&amp;")
 
 def _xmlify(matches):
+    """convert match into alfred xml"""
     items = ""
     for match in matches:
         desc, entity = match
@@ -21,17 +22,25 @@ def _xmlify(matches):
         items += "</item>"
     return f'<?xml version="1.0" encoding="utf-8"?><items>{items}</items>'
 
+def _normalizer(has_upper):
+    if has_upper:
+        return lambda s: s
+    else:
+        return lambda s: s.lower()
+
 def _matches(queries, desc, entity):
     for query in queries:
         if query not in desc and query not in entity:
             return False
     return True
 
-args = " ".join(sys.argv[1:])
-queries = list(map(lambda s: s.strip().lower(), args.split(" ")))
+# collect all args and split on space (alfred passes as single arg, cli easier w/ multiple args)
+terms = " ".join(sys.argv[1:]).split(" ")
+queries = list(map(lambda s: s.strip(), terms))
+term_norm = _normalizer(any(map(lambda s: s.lower() != s, queries)))
 
 with open("entities.db", mode="r", encoding="utf8") as f:
-    matches = [(desc, entity) for (desc, entity) in csv.reader(f) if _matches(queries, desc, entity)]
+    matches = [(desc, entity) for (desc, entity) in csv.reader(f) if _matches(queries, term_norm(desc), term_norm(entity))]
 
     if len(matches) > 0:
         print(_xmlify(matches))
