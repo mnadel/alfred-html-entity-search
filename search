@@ -5,10 +5,11 @@ import csv
 import html
 
 def _escape(s):
+    """escape ampersands in the string"""
     return s.replace("&", "&amp;")
 
 def _xmlify(matches):
-    """convert match into alfred xml"""
+    """convert matches into alfred xml"""
     items = ""
     for match in matches:
         desc, entity = match
@@ -23,12 +24,14 @@ def _xmlify(matches):
     return f'<?xml version="1.0" encoding="utf-8"?><items>{items}</items>'
 
 def _normalizer(has_upper):
+    """return a func that converts a string: if arg is True then returns self, else convers to lowercase"""
     if has_upper:
         return lambda s: s
     else:
         return lambda s: s.lower()
 
 def _matches(queries, desc, entity):
+    """return True if all queries are found in either desc or entity"""
     for query in queries:
         if query not in desc and query not in entity:
             return False
@@ -37,10 +40,10 @@ def _matches(queries, desc, entity):
 # collect all args and split on space (alfred passes as single arg, cli easier w/ multiple args)
 terms = " ".join(sys.argv[1:]).split(" ")
 queries = list(map(lambda s: s.strip(), terms))
-term_norm = _normalizer(any(map(lambda s: s.lower() != s, queries)))
+norm = _normalizer(any(map(lambda s: s.lower() != s, queries)))
 
 with open("entities.db", mode="r", encoding="utf8") as f:
-    matches = [(desc, entity) for (desc, entity) in csv.reader(f) if _matches(queries, term_norm(desc), term_norm(entity))]
+    matches = [(desc, entity) for (desc, entity) in csv.reader(f) if _matches(queries, norm(desc), norm(entity))]
 
     if len(matches) > 0:
         print(_xmlify(matches))
