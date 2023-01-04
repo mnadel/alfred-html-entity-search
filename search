@@ -39,7 +39,7 @@ def _matches(queries, desc, entity):
 
 # collect all args and split on space (alfred passes as single arg, cli easier w/ multiple args)
 terms = " ".join(sys.argv[1:]).split(" ")
-queries = list(map(lambda s: s.strip(), terms))
+queries = tuple(map(lambda s: s.strip(), terms))
 norm = _normalizer(any(map(lambda s: s.lower() != s, queries)))
 
 with open("entities.db", mode="r", encoding="utf8") as f:
