@@ -1,11 +1,8 @@
 deps:
 	gem install nokogiri
 
-install: deps
+install:
 	./gendb | sort > entities.db
 
-package:
+package: install
 	zip "HTML Entity Search.alfredworkflow" *
-
-.PHONY: deps
-
